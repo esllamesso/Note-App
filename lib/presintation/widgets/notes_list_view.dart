@@ -13,10 +13,10 @@ class _NotesListViewState extends State<NotesListView> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 550,
+      height: 750,
       child: ListView.builder(
         scrollDirection: Axis.vertical,
-        itemCount: 5,
+        itemCount: 10,
         itemBuilder: (context, index) {
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 22, vertical: 9),
@@ -26,13 +26,13 @@ class _NotesListViewState extends State<NotesListView> {
                 onTap: () {},
                 child: Container(
                   width: 390,
-                  height: 80,
+                  //height: 80,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
                     color: ColorsManager.marron,
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 20, top: 20),
+                    padding: EdgeInsets.only(left: 12, top: 20,right: 12, bottom: 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -48,12 +48,16 @@ class _NotesListViewState extends State<NotesListView> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Text(
-                              "Excepteur sint occaecat cupidatat non proiden.",
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                                color: ColorsManager.light,
+                            Expanded(
+                              child: Text(
+                                "Excepteur sint occaecat cupidatat non proiden .",
+
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
+                                  color: ColorsManager.light,
+                                ),
+                                maxLines: 2,
                               ),
                             ),
                             Text(
