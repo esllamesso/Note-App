@@ -49,14 +49,14 @@ class _LoginScreenState extends State<LoginScreen> {
             body: SafeArea(
               child: Center(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(
+                  padding:  EdgeInsets.symmetric(
                     horizontal: 24,
                     vertical: 12,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Center(
+                       Center(
                         child: Text(
                           "Hi, Welcome Back!",
                           style: TextStyle(
@@ -66,8 +66,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 44),
-                      const Text(
+                       SizedBox(height: 44),
+                       Text(
                         "Email",
                         style: TextStyle(
                           color: Colors.white,
@@ -80,8 +80,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         keyType: TextInputType.emailAddress,
                         controller: emailController,
                       ),
-                      const SizedBox(height: 24),
-                      const Text(
+                       SizedBox(height: 24),
+                       Text(
                         "Password",
                         style: TextStyle(
                           color: Colors.white,
@@ -108,7 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                         ),
                       ),
-                      const SizedBox(height: 44),
+                      SizedBox(height: 44),
 
                       (state is LoginLoadingState)
                           ? Center(
@@ -141,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   borderRadius: BorderRadius.circular(12),
                                   color: Colors.white,
                                 ),
-                                child: const Center(
+                                child: Center(
                                   child: Text(
                                     "Login",
                                     style: TextStyle(
@@ -153,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                             ),
-                      const SizedBox(height: 19),
+                      SizedBox(height: 19),
 
                       InkWell(
                         onTap: () {},
@@ -165,7 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.circular(12),
                             color: Colors.white,
                           ),
-                          child: const Center(
+                          child: Center(
                             child: Text(
                               "Continue With Google",
                               style: TextStyle(
@@ -181,7 +181,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text(
+                           Text(
                             "Don’t have an account? ",
                             style: TextStyle(
                               fontSize: 16,
@@ -194,13 +194,13 @@ class _LoginScreenState extends State<LoginScreen> {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const SignUpScreen(),
+                                  builder: (context) => SignUpScreen(),
                                 ),
                               );
                             },
                             splashColor: Colors.transparent,
                             highlightColor: Colors.transparent,
-                            child: const Text(
+                            child: Text(
                               "Sign Up",
                               style: TextStyle(
                                 fontSize: 16,
