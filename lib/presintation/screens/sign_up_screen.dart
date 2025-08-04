@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:note_app/core/colors/colors_manager.dart';
 import 'package:note_app/logic/sign_up/cubit.dart';
 import 'package:note_app/logic/sign_up/state.dart';
 import 'package:note_app/presintation/screens/notes_screen.dart';
@@ -44,7 +45,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         },
         builder: (context, state) {
           return Scaffold(
-            backgroundColor: Colors.black,
+            backgroundColor: ColorsManager.background,
             body: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: SingleChildScrollView(

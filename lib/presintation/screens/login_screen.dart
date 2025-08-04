@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:note_app/core/colors/colors_manager.dart';
 import 'package:note_app/logic/login/cubit.dart';
-import 'package:note_app/logic/sign_up/state.dart';
-import 'package:note_app/logic/state.dart';
+import 'package:note_app/logic/login/state.dart';
 import 'package:note_app/presintation/screens/notes_screen.dart';
 import 'package:note_app/presintation/screens/sign_up_screen.dart';
 import '../widgets/text_form_filed_widget.dart';
@@ -45,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
         builder: (context, state) {
           return Scaffold(
-            backgroundColor: Colors.black,
+            backgroundColor: ColorsManager.background,
             body: SafeArea(
               child: Center(
                 child: SingleChildScrollView(
@@ -119,9 +119,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           : InkWell(
                               onTap: () {
                                 final email = emailController.text.trim();
-                                final passowrd = passController.text.trim();
+                                final password = passController.text.trim();
 
-                                if (email.isEmpty || passowrd.isEmpty) {
+                                if (email.isEmpty || password.isEmpty) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(
@@ -131,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   );
                                   return;
                                 }
-                                BlocProvider.of<LoginCubit>(context).userLogin(email: email, password: passowrd);
+                                BlocProvider.of<LoginCubit>(context).userLogin(email: email, password: password);
                               },
                               borderRadius: BorderRadius.circular(12),
                               child: Container(
