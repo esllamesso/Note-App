@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -41,6 +44,16 @@ class _CreateNoteScreenState extends State<CreateNoteScreen> {
     }
   }
 
+  Future <String?> uploadImage(XFile image) async{
+    try{
+      final storage = FirebaseStorage.instance.ref().child("note_images/${DateTime.now().microsecondsSinceEpoch}.jpg");
+      await storage.putFile(File(image.path));
+      return await storage!.getDownloadURL();
+    }catch(e){
+      print("Upload Error =====$e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -62,7 +75,7 @@ class _CreateNoteScreenState extends State<CreateNoteScreen> {
           }
         },
         builder: (context, state) {
-          final size =MediaQuery.of(context).size;
+          final size = MediaQuery.of(context).size;
           return Scaffold(
             backgroundColor: ColorsManager.background,
             body: Stack(
@@ -102,7 +115,7 @@ class _CreateNoteScreenState extends State<CreateNoteScreen> {
                                     ),
                                   ),
                                   SizedBox(height: 9),
-                          
+
                                   TextFormFiledWidget(
                                     hintTxt: 'Enter Note Address',
                                     keyType: TextInputType.text,
@@ -126,9 +139,24 @@ class _CreateNoteScreenState extends State<CreateNoteScreen> {
                                       vertical: 90,
                                     ),
                                   ),
-                                  SizedBox(height: size.height * 0.2),
-                                  InkWell(
-                                    onTap: () {
+                                  SizedBox(height: size.height * 0.03),
+                                  selectMedia == null
+                                      ? SizedBox(height: 70)
+                                      : Padding(
+                                          padding: EdgeInsets.only(
+                                            bottom: size.height * 0.03,
+                                          ),
+                                          child: Center(
+                                            child: Image.file(
+                                              File(selectMedia!.path),
+                                              width: 100,
+                                              height: 100,
+                                              fit: BoxFit.contain,
+                                            ),
+                                          ),
+                                        ),
+                                   InkWell(
+                                     onTap: () {
                                       showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
@@ -162,6 +190,7 @@ class _CreateNoteScreenState extends State<CreateNoteScreen> {
                                                     ),
                                                     onTap: () {
                                                       selectImageMedia();
+                                                      Navigator.pop(context);
                                                     },
                                                   ),
                                                   SizedBox(height: 10),
@@ -219,14 +248,30 @@ class _CreateNoteScreenState extends State<CreateNoteScreen> {
                                   ),
                                   SizedBox(height: 9),
                                   InkWell(
-                                    onTap: () {
-                                      context.read<CreateNote>().noteCreate(
-                                        NoteModel(
-                                          headLine: noteAddressController.text,
-                                          description: descController.text,
-                                          createdAt: DateTime.now(),
-                                        ),
-                                      );
+                                    onTap: () async {
+                                      if (selectMedia != null) {
+                                        final link = await uploadImage(selectMedia!);
+                                        context.read<CreateNote>().noteCreate(
+                                          NoteModel(
+                                            headLine: noteAddressController.text,
+                                            description: descController.text,
+                                            createdAt: DateTime.now(),
+                                            imageUrl: link,
+                                          ),
+                                        );
+
+                                      }else{
+
+                                        context.read<CreateNote>().noteCreate(
+                                          NoteModel(
+                                            headLine: noteAddressController.text,
+                                            description: descController.text,
+                                            createdAt: DateTime.now(),
+                                          ),
+                                        );
+                                      }
+
+
                                     },
                                     borderRadius: BorderRadius.circular(12),
                                     child: Container(
@@ -240,16 +285,17 @@ class _CreateNoteScreenState extends State<CreateNoteScreen> {
                                         child: (state is CreateNoteLoadingState)
                                             ? CircularProgressIndicator()
                                             : Text(
-                                                "Create",
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 16,
-                                                ),
-                                              ),
+                                          "Create",
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 16,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
+
                                 ],
                               ),
                             ],

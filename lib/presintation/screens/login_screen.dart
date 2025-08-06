@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_app/core/colors/colors_manager.dart';
@@ -18,6 +19,15 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isObscure = true;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passController = TextEditingController();
+
+  void _toggleLanguage(BuildContext context) {
+    final currentLocale = context.locale;
+    if (currentLocale.languageCode == 'en') {
+      context.setLocale(Locale('ar'));
+    } else {
+      context.setLocale(Locale('en'));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                        Center(
                         child: Text(
-                          "Hi, Welcome Back!",
+                          "Hi, Welcome Back!".tr(),
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.w700,
@@ -66,9 +76,18 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ),
+                      SizedBox(height: 8),
+                       Center(
+                         child: IconButton(
+                             onPressed: (){
+                                _toggleLanguage(context);
+                             },
+                             icon: Icon(Icons.translate)),
+                       ),
+
                        SizedBox(height: 44),
                        Text(
-                        "Email",
+                        "Email".tr(),
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 14,
@@ -82,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                        SizedBox(height: 24),
                        Text(
-                        "Password",
+                        "Password".tr(),
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 14,
@@ -90,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       TextFormFiledWidget(
-                        hintTxt: 'Enter Your Password',
+                        hintTxt: 'Enter Your Password'.tr(),
                         obscureText: _isObscure,
                         keyType: TextInputType.visiblePassword,
                         controller: passController,
@@ -143,7 +162,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    "Login",
+                                    "Login".tr(),
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.w600,
@@ -167,7 +186,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           child: Center(
                             child: Text(
-                              "Continue With Google",
+                              "Continue With Google".tr(),
                               style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.w600,
@@ -182,7 +201,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                            Text(
-                            "Don’t have an account? ",
+                            "Don’t have an account? ".tr(),
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
@@ -201,7 +220,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             splashColor: Colors.transparent,
                             highlightColor: Colors.transparent,
                             child: Text(
-                              "Sign Up",
+                              "Sign Up".tr(),
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
