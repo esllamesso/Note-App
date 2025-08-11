@@ -8,6 +8,8 @@ import 'package:note_app/presintation/screens/login_screen.dart';
 import 'package:note_app/presintation/widgets/notes_list_view.dart';
 import 'package:note_app/presintation/widgets/top_button_widget.dart';
 
+import '../../core/utils/shared_prefs_helper.dart';
+
 class NotesScreen extends StatefulWidget {
   const NotesScreen({super.key});
 
@@ -22,79 +24,80 @@ class _NotesScreenState extends State<NotesScreen> {
       create: (context) => GetNoteCubit()..getNotes(),
       child: Scaffold(
         backgroundColor: ColorsManager.background,
-        body: Stack(
-          children: [
-            TopButtonWidget(),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 137),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CreateNoteScreen(),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          width: 164,
-                          height: 48,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: Center(
-                            child: Text(
-                              "Add Note",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 18),
-                      InkWell(
-                        onTap: () {
-                          FirebaseAuth.instance.signOut();
-                          Navigator.pushReplacement(context,
+        body: Padding(
+          padding:  EdgeInsets.only(top: 40),
+          child: Stack(
+            children: [
+              TopButtonWidget(),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 137),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
                               MaterialPageRoute(
-                                  builder: (context) => LoginScreen()));
-                        },
-                        child: Container(
-                          width: 164,
-                          height: 48,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: Center(
-                            child: Text(
-                              "Log Out",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black,
+                                builder: (context) => CreateNoteScreen(),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            width: 164,
+                            height: 48,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Center(
+                              child: Text(
+                                "Add Note",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 34),
-                  NotesListView(),
-                ],
+                        SizedBox(width: 18),
+                        InkWell(
+                          onTap: () async {
+                            await FirebaseAuth.instance.signOut();
+                            await SharedPrefsHelper.clearLoginData();
+                          },
+                          child: Container(
+                            width: 164,
+                            height: 48,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Center(
+                              child: Text(
+                                "Log Out",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 34),
+                    NotesListView(),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

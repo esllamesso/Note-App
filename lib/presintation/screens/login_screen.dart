@@ -2,10 +2,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_app/core/colors/colors_manager.dart';
+import 'package:note_app/core/utils/shared_prefs_helper.dart';
 import 'package:note_app/logic/login/cubit.dart';
 import 'package:note_app/logic/login/state.dart';
 import 'package:note_app/presintation/screens/notes_screen.dart';
 import 'package:note_app/presintation/screens/sign_up_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../widgets/text_form_filed_widget.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -20,14 +22,15 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passController = TextEditingController();
 
-  void _toggleLanguage(BuildContext context) {
-    final currentLocale = context.locale;
-    if (currentLocale.languageCode == 'en') {
-      context.setLocale(Locale('ar'));
-    } else {
-      context.setLocale(Locale('en'));
-    }
+  void _toggleLanguage(BuildContext context) async {
+    final currentLocale = context.locale.languageCode;
+    final newLocale = currentLocale == 'en' ? const Locale('ar') : const Locale('en');
+
+    await SharedPrefsHelper.setLocale(newLocale.languageCode);
+
+    context.setLocale(newLocale);
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +82,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(height: 8),
                        Center(
                          child: IconButton(
-                             onPressed: (){
+                             onPressed: () {
+
                                 _toggleLanguage(context);
                              },
                              icon: Icon(Icons.translate)),
@@ -109,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       TextFormFiledWidget(
-                        hintTxt: 'Enter Your Password'.tr(),
+                        hintTxt: "Enter Your Password".tr(),
                         obscureText: _isObscure,
                         keyType: TextInputType.visiblePassword,
                         controller: passController,
@@ -135,67 +139,75 @@ class _LoginScreenState extends State<LoginScreen> {
                                 color: Colors.white,
                               ),
                             )
-                          : InkWell(
-                              onTap: () {
-                                final email = emailController.text.trim();
-                                final password = passController.text.trim();
+                          : Column(
+                            children: [
+                              InkWell(
+                                  onTap: () {
+                                    final email = emailController.text.trim();
+                                    final password = passController.text.trim();
 
-                                if (email.isEmpty || password.isEmpty) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        "Please Enter Your Email and Password",
+                                    if (email.isEmpty || password.isEmpty) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            "Please Enter Your Email and Password",
+                                          ),
+                                        ),
+                                      );
+                                      return;
+                                    }
+                                    BlocProvider.of<LoginCubit>(context).userLogin(email: email, password: password);
+                                  },
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 48,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      color: Colors.white,
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "Login".tr(),
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 16,
+                                        ),
                                       ),
                                     ),
-                                  );
-                                  return;
-                                }
-                                BlocProvider.of<LoginCubit>(context).userLogin(email: email, password: password);
-                              },
-                              borderRadius: BorderRadius.circular(12),
-                              child: Container(
-                                width: double.infinity,
-                                height: 48,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  color: Colors.white,
+                                  ),
                                 ),
-                                child: Center(
-                                  child: Text(
-                                    "Login".tr(),
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 16,
+                              SizedBox(height: 19),
+                              InkWell(
+                                onTap: () {
+                                  context.read<LoginCubit>().continueWithGoogle();
+                                },
+                                borderRadius: BorderRadius.circular(12),
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 48,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Colors.white,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      "Continue With Google".tr(),
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                      SizedBox(height: 19),
+                            ],
+                          ),
 
-                      InkWell(
-                        onTap: () {},
-                        borderRadius: BorderRadius.circular(12),
-                        child: Container(
-                          width: double.infinity,
-                          height: 48,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            color: Colors.white,
-                          ),
-                          child: Center(
-                            child: Text(
-                              "Continue With Google".tr(),
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+
+
                       SizedBox(height: 40),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,

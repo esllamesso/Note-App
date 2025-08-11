@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_app/logic/get_note/cubit.dart';
 import 'package:note_app/logic/get_note/state.dart';
+import 'package:note_app/presintation/screens/note_screen_details.dart';
 
 import '../../core/colors/colors_manager.dart';
 
@@ -32,7 +33,9 @@ class _NotesListViewState extends State<NotesListView> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (_)=> NoteScreenDetails(note: note,)));
+                      },
                       child: Container(
                         decoration: BoxDecoration(
                           color: ColorsManager.marron,
@@ -57,6 +60,7 @@ class _NotesListViewState extends State<NotesListView> {
                                 Expanded(
                                   child: Text(
                                     note.description,
+                                    maxLines: 2,
                                     style: TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w400,

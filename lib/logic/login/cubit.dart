@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:note_app/core/utils/shared_prefs_helper.dart';
 import 'state.dart';
 
 class LoginCubit extends Cubit<LoginStates> {
@@ -16,6 +18,7 @@ class LoginCubit extends Cubit<LoginStates> {
         password: password,
       );
       emit(LoginSuccessState());
+      await SharedPrefsHelper.setIsLoggedIn(true);
     } on FirebaseAuthException catch (error) {
       String errorMessage;
 
@@ -32,5 +35,41 @@ class LoginCubit extends Cubit<LoginStates> {
 
       emit(LoginErrorState(errorMassage: errorMessage));
     }
+  }
+
+  Future<void> continueWithGoogle() async {
+    emit(LoginLoadingState());
+
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      if (googleUser == null) {
+        // User canceled the sign-in
+        emit(LoginErrorState(errorMassage:  'Google sign-in was canceled.'));
+        return;
+      }
+
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      await FirebaseAuth.instance.signInWithCredential(credential);
+      await SharedPrefsHelper.setIsLoggedIn(true);
+
+
+      emit(LoginSuccessState());
+    } catch (e) {
+      print("Google Sign-In Error: $e");
+      emit(LoginErrorState(errorMassage: e.toString()));
+    }
+  }
+
+  Future<void> logout() async {
+    await FirebaseAuth.instance.signOut();
+    await SharedPrefsHelper.clear();
+    emit(LoginInitialState());
   }
 }

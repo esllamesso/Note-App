@@ -2,8 +2,9 @@
   "Hi, Welcome Back!": "مرحبا بعودتك",
   "Email": "البريد الالكتروني",
   "Password": "الرقم السري",
-  "Login" : "تسجيل الدخول",
-  "Continue With Google" : "تسجيل الدخول باستخدام جوجل",
-  "Don’t have an account? " : "ليس لديك حساب؟ ",
-  "Sign Up" : "إنشاء حساب جديد"
+  "Login": "تسجيل الدخول",
+  "Continue With Google": "تسجيل الدخول باستخدام جوجل",
+  "Don’t have an account? ": "ليس لديك حساب؟ ",
+  "Sign Up": "إنشاء حساب جديد",
+  "Enter Your Password": "أدخل الرقم السري الخاص بك"
 }
